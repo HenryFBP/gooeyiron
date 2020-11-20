@@ -1,6 +1,6 @@
 # Gooey Iron
 
-Gooey Iron is a MultiMC GUI-based pack testing tool.
+Gooey Iron is a MultiMC/`packwiz` GUI-based pack testing tool.
 
 ## Running
 
