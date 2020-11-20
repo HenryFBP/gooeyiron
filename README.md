@@ -2,6 +2,10 @@
 
 Gooey Iron is a MultiMC/`packwiz` GUI-based pack testing tool.
 
+It runs MultiMC and loads a `packwiz` modpack into it, and exits with `0` if Minecraft runs, `1` if Minecraft fails to run.
+
+Intended to be used in conjunction with Jenkins to check if a modpack will crash when loaded into MultiMC and ran.
+
 ## Running
 
 TODO
