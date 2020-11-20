@@ -1,4 +1,12 @@
-# Notes about pyautogui MultiMC Jenkins Testing
+# Gooey Iron
+
+Gooey Iron is a MultiMC GUI-based pack testing tool.
+
+## Running
+
+TODO
+
+## Notes about pyautogui MultiMC Jenkins Testing
 
 "xvfb with mesa should work on linux"
 "actually I remember reading a post about dolphin's rendering testing automation, that might have some useful ideas"

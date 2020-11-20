@@ -7,12 +7,13 @@ timestamps {
         }
         stage ('Pre-build') {
             bat '''pipenv install'''
+            bat '''git clone https://github.com/HenryFBP/gooeyiron'''
         }
         timeout(20) {
             stage ('Build') {
                 // Unable to convert a build step referring to "com.cloudbees.jenkins.GitHubSetCommitStatusBuilder". Please verify and convert manually if required.        // Batch build step
                 bat '''packwiz refresh'''
-                bat '''pipenv run python test-with-pyautogui.py'''
+                bat '''pipenv run python gooeyiron/gooeyiron.py --packfolder="./" '''
             }
         }
     }

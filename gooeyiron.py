@@ -4,11 +4,6 @@ Test the modpack by launching MultiMC, importing and running the pack.
 Exits with different error codes depending on what went wrong.
 '''
 from pprint import pprint
-try:
-    from scripts.pyautogui.utils import *
-    from scripts.pyautogui.config import *
-except Exception:
-    pass  # lol thanks IDE, you know what local paths are
 from config import *
 from utils import *
 import shutil
@@ -16,13 +11,26 @@ import os
 import time
 import pygetwindow as gw
 import pyautogui as pag
+import argparse
+
+print("--- Gooey Iron, the MultiMC Gui packwiz testing tool ---")
 
 if is_vm():
     print("We are running in a VM!")
 else:
     print("We are not running in a VM!")
 
+argp = argparse.ArgumentParser()
+
+argp.add_argument("--packfolder", required=True, metavar=str, help="Folder that the `packwiz` pack resides in.")
+
+PACK_FOLDER=argp.packfolder
+
 if __name__ == '__main__':
+
+
+
+
     ensure_packwiz_installed()
     ensure_multimc_installed()
 
@@ -33,7 +41,7 @@ if __name__ == '__main__':
     print(mmc_proc)
     pprint(mmc_proc)
     time.sleep(10)  # wait for mmc to open
-    
+
     im2 = pag.screenshot('before_mmc_window.png')
     mmc_window = get_multimc_window()
     # mmc_window.activate() # Also doesn't focus... Crashes.
@@ -171,13 +179,13 @@ if __name__ == '__main__':
         elif logfile_says_ran_out_of_VRAM_while_stitching(logfile_data):
 
             if is_vm():
-                print("I'm a VM, I have like, no VRAM...so...Just going to exit with status 0...Don't mind me... TODO Actually buy a machine for this!") 
-                #TODO Actually invest in a bare metal machine to test lol.
+                print("I'm a VM, I have like, no VRAM...so...Just going to exit with status 0...Don't mind me... TODO Actually buy a machine for this!")
+                # TODO Actually invest in a bare metal machine to test lol.
                 exit(0)
             else:
                 dump_list_str_to_stdout(logfile_data)
-                raise Exception("Logfile says MC ran out of VRAM while stictching textures.")
-
+                raise Exception(
+                    "Logfile says MC ran out of VRAM while stictching textures.")
 
         elif logdata_says_minecraft_crash_report(logfile_data):
             dump_list_str_to_stdout(logfile_data)

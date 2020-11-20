@@ -3,23 +3,15 @@ from pprint import pprint
 import distutils.spawn
 import re
 from typing import List
-try:
-    from scripts.pyautogui.config import *
-except Exception:
-    pass  # lol thanks IDE, you know what local paths are
 from config import *
 import psutil
 import subprocess
-import shutil
 import os
-import time
 from pygetwindow import BaseWindow
 import pygetwindow as gw
 import pyautogui as pag
 from psutil import Process
-from os import remove
 import platform
-import timeit
 
 
 def is_windows():
@@ -190,8 +182,10 @@ def get_multimc_window() -> BaseWindow:
     pprint(w)
     return w
 
-def get_active_window_title()->str:
+
+def get_active_window_title() -> str:
     return gw.getActiveWindow().title
+
 
 def generate_modpack_zip():
 
@@ -208,7 +202,7 @@ def generate_modpack_zip():
         with open('./index.toml', 'w') as _:
             pass
 
-    print(subprocess.check_output(['packwiz', 'refresh'])) # Make index.toml
+    print(subprocess.check_output(['packwiz', 'refresh']))  # Make index.toml
     print(subprocess.check_output(['packwiz', 'cf', 'export']))
     print("Done!")
 
@@ -232,15 +226,17 @@ def line_in_data_matches_rexp(data: List[str], rexps: Union[List[str], str]) -> 
     return False
 
 
-def get_file_data(path:str)->List[str]:
+def get_file_data(path: str) -> List[str]:
     with open(path, 'r') as f:
         data = f.readlines()
-    
+
     return data
 
-def dump_list_str_to_stdout(l:List[str],endl=''):
+
+def dump_list_str_to_stdout(l: List[str], endl=''):
     for line in l:
-        print(line,end=endl)
+        print(line, end=endl)
+
 
 def line_in_file_matches_rexp(path: str, rexps: Union[List[str], str]) -> bool:
     """Does a line in a file match one or more regular expressions?"""
@@ -253,15 +249,18 @@ def line_in_file_matches_rexp(path: str, rexps: Union[List[str], str]) -> bool:
 
     return line_in_data_matches_rexp(data, rexps)
 
-def logfile_says_ran_out_of_VRAM_while_stitching(data:List[str]):
+
+def logfile_says_ran_out_of_VRAM_while_stitching(data: List[str]):
     """Does the logfile indicate Minecraft has crashed due to running out of VRAM while stitching textures?"""
     return line_in_data_matches_rexp(data, MINECRAFT_TEXTURE_STITCHER_OUT_OF_VRAM)
 
-def logdata_says_done_loading_mods(data:List[str]):
+
+def logdata_says_done_loading_mods(data: List[str]):
     """Does the logfile indicate forge is done loading mods?"""
 
     return line_in_data_matches_rexp(data, FORGE_LOADED_REXP)
 
-def logdata_says_minecraft_crash_report(data:List[str]):
+
+def logdata_says_minecraft_crash_report(data: List[str]):
     """Does the logfile indicate Minecraft has crashed?"""
     return line_in_data_matches_rexp(data, MINECRAFT_CRASHED_REXP)
