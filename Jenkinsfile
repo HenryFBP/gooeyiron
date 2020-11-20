@@ -12,7 +12,7 @@ timestamps {
             stage ('Build') {
                 // Unable to convert a build step referring to "com.cloudbees.jenkins.GitHubSetCommitStatusBuilder". Please verify and convert manually if required.        // Batch build step
                 bat '''packwiz refresh'''
-                bat '''pipenv run python scripts/pyautogui/test-with-pyautogui.py'''
+                bat '''pipenv run python test-with-pyautogui.py'''
             }
         }
     }
