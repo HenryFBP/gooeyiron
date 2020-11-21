@@ -8,7 +8,9 @@ Intended to be used in conjunction with Jenkins to check if a modpack will crash
 
 ## Running
 
-TODO
+Example: Your modpack resides in `../rivers-of-iron-mc/`.
+
+    pipenv run python ./gooeyiron.py -f ../rivers-of-iron-mc/ -t multimcgui
 
 ## Notes about pyautogui MultiMC Jenkins Testing
 
