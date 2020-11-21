@@ -187,28 +187,39 @@ def get_active_window_title() -> str:
     return gw.getActiveWindow().title
 
 
-def generate_modpack_zip():
+def get_packDOTtoml_path(modpack_path)->str:
+    return os.path.join(modpack_path, 'pack.toml')
 
-    print("Generating modpack zip at "+ZIP_NAME)
-    if not os.path.exists("./pack.toml"):
+def get_indexDOTtoml_path(modpack_path)->str:
+    return os.path.join(modpack_path, 'index.toml')
+
+def generate_modpack_zip(modpack_path) -> str:
+
+    packDOTtoml_path=get_packDOTtoml_path(modpack_path)
+    indexDOTtoml_path=get_indexDOTtoml_path(modpack_path)
+    zip_path=os.path.join(modpack_path,ZIP_NAME)
+    default_zip_path=os.path.join(modpack_path,DEFAULT_ZIP_NAME)
+
+    print("Generating modpack zip at "+zip_path)
+    if not os.path.exists(packDOTtoml_path):
         raise Exception(
-            "Could not find pack.toml in current working directory '{}'!".format(os.getcwd()))
+            "Could not find pack.toml in '{}'!".format(packDOTtoml_path))
 
-    remove_file(ZIP_NAME)
-    remove_file(DEFAULT_ZIP_NAME)
+    remove_file(default_zip_path)
+    remove_file(zip_path)
 
     # For some odd reason, packwiz refresh fails if this file doesn't exist.
-    if not os.path.exists("./index.toml"):
-        with open('./index.toml', 'w') as _:
+    if not os.path.exists(indexDOTtoml_path):
+        with open(indexDOTtoml_path, 'w') as _:
             pass
 
-    print(subprocess.check_output(['packwiz', 'refresh']))  # Make index.toml
-    print(subprocess.check_output(['packwiz', 'cf', 'export']))
+    print(subprocess.check_call(['packwiz', 'refresh'], cwd=modpack_path))  # Make index.toml
+    print(subprocess.check_call(['packwiz', 'cf', 'export'],cwd=modpack_path))
     print("Done!")
 
-    os.rename(DEFAULT_ZIP_NAME, ZIP_NAME)
+    os.rename(default_zip_path, zip_path)
 
-    # exit(1)
+    return zip_path
 
 
 def line_in_data_matches_rexp(data: List[str], rexps: Union[List[str], str]) -> bool:

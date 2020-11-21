@@ -11,31 +11,45 @@ import os
 import time
 import pygetwindow as gw
 import pyautogui as pag
+from enum import Enum
 import argparse
 
 print("--- Gooey Iron, the MultiMC Gui packwiz testing tool ---")
 
-if is_vm():
-    print("We are running in a VM!")
-else:
-    print("We are not running in a VM!")
+
+# Type of test to run.
+class TestType(Enum):
+    multimcgui = 'multimcgui'
+
 
 argp = argparse.ArgumentParser()
 
-argp.add_argument("--packfolder", required=True, metavar=str, help="Folder that the `packwiz` pack resides in.")
+argp.add_argument("--packFolder", '-f', required=True, type=str,
+                  help="Folder that the `packwiz` pack resides in. Must contain 'pack.toml' file.")
 
-PACK_FOLDER=argp.packfolder
+argp.add_argument("--testType", '-t', required=True, type=TestType, choices=list(TestType),
+                  help="Type of test to run. Currently only choice is 'multimcgui'.`")
+
+args = argp.parse_args()
+
+PACK_FOLDER = args.packFolder
 
 if __name__ == '__main__':
 
+    if is_vm():
+        print("We are running in a VM!")
+    else:
+        print("We are not running in a VM!")
 
-
+    if not os.path.exists(get_packDOTtoml_path(PACK_FOLDER)):
+        raise Exception(
+            "Did not find pack.toml inside of {}!".format(get_packDOTtoml_path(PACK_FOLDER)))
 
     ensure_packwiz_installed()
     ensure_multimc_installed()
 
     ensure_multimc_closed()
-    generate_modpack_zip()
+    zip_path = generate_modpack_zip(PACK_FOLDER)
 
     mmc_proc = open_multimc()
     print(mmc_proc)
@@ -87,7 +101,7 @@ if __name__ == '__main__':
 
     pag.press(['tab', 'tab'], interval=0.5)  # to focus text box
 
-    pag.typewrite(os.path.realpath(ZIP_NAME))  # enter path
+    pag.typewrite(os.path.realpath(zip_path))  # enter path to zip
 
     pag.press('enter')
     time.sleep(20)
