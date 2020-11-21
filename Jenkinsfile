@@ -1,7 +1,7 @@
 // Powered by Infostretch
 
 timestamps {
-    node ('GUI_Tests') {
+    node ('GUI_Test_Node') {
         stage ('Checkout') {
             checkout([$class: 'GitSCM', branches: [[name: '*/master']], doGenerateSubmoduleConfigurations: false, extensions: [], submoduleCfg: [], userRemoteConfigs: [[credentialsId: 'henrygithub', url: 'git@github.com:HenryFBP/rivers-of-iron-mc.git']]])
         }
@@ -13,7 +13,7 @@ timestamps {
             stage ('Build') {
                 // Unable to convert a build step referring to "com.cloudbees.jenkins.GitHubSetCommitStatusBuilder". Please verify and convert manually if required.        // Batch build step
                 bat '''packwiz refresh'''
-                bat '''pipenv run python gooeyiron/gooeyiron.py --packfolder="./" '''
+                bat '''cd gooeyiron && pipenv run python ./gooeyiron.py -f ../ -t multimcgui'''
             }
         }
     }
